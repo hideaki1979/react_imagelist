@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import { ImageUploader } from "./components/ImageUploader";
+import { ImageGallary } from "./components/ImageGalllary";
 
 function App() {
   const [images, setImages] = useState([]);
@@ -23,9 +25,7 @@ function App() {
         setImages(newImages);
         // LocalStorageに保存
         try {
-          if (images.length > 0) {
-            localStorage.setItem("images", JSON.stringify(newImages));
-          }
+          localStorage.setItem("images", JSON.stringify(newImages));
         } catch (error) {
           console.error("ローカルストレージへの画像保存時エラー：", error);
         }
@@ -52,35 +52,10 @@ function App() {
             <h1 className="text-3xl font-bold text-center mb-4">
               画像ギャラリー
             </h1>
-            <label className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg cursor-pointer inline-block items-center">
-              画像アップロード
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleUpload}
-              />
-            </label>
+            <ImageUploader onUpload={handleUpload} />
           </header>
           <section>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-              {/* 画像表示エリア */}
-              {images.map((img, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={img}
-                    className="w-full h-full object-contain rounded shadow-lg bg-white"
-                    alt="アップロードされた画像ファイル"
-                  />
-                  <button
-                    onClick={() => handleDelete(index)}
-                    className="absolute top-1 right-1 bg-red-500/70 text-white px-2 py-1 rounded cursor-pointer"
-                  >
-                    削除
-                  </button>
-                </div>
-              ))}
-            </div>
+            <ImageGallary images={images} onDelete={handleDelete} />
           </section>
         </main>
       </div>
